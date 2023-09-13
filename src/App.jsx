@@ -5,12 +5,14 @@ import {
     Routes,
     Route
 } from "react-router-dom";
+import Header from "./Components/Header.jsx";
 
 function App() {
 
     return (
         <>
             <BrowserRouter>
+                <Header />
                 <Routes>
                     <Route path="/" element={<Login/>}/>
                 </Routes>
