@@ -1,6 +1,39 @@
 import styled from 'styled-components';
+import {auth, provider} from "../firebase.js";
+import {signInWithPopup} from 'firebase/auth';
+import {useDispatch, useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
+import {
+    selectUserName,
+    selectUserEmail,
+    selectUserPhoto,
+    setUserLoginDetails
+} from '../features/user/userSlice.js'
 
 const Header = (props) => {
+    const dispatch = useDispatch();
+    const history = useNavigate();
+    const userName = useSelector(selectUserName);
+    const userEmail = useSelector(selectUserEmail);
+    const userPhoto = useSelector(selectUserPhoto);
+
+    const handleAuth = () => {
+        signInWithPopup(auth, provider).then(result => {
+            console.log(result)
+            setUser(result.user)
+        }).catch(err => {
+            console.log(err.message)
+        })
+    }
+
+    const setUser = (user) => {
+        dispatch(setUserLoginDetails({
+                name: user.displayName,
+                email: user.email,
+                photo: user.photoURL,
+            }
+        ))
+    }
     return (
         <Nav>
             <Logo>
@@ -32,12 +65,17 @@ const Header = (props) => {
                     <span>SERIES</span>
                 </a>
             </NavMenu>
-            <Login>Login</Login>
+            {
+                !userName ? <Login onClick={handleAuth}>Login</Login> : <>
+                    <UserImg src={userPhoto} alt={userName}></UserImg>
+                </>
+            }
+
         </Nav>
     );
 };
 
-const Nav  = styled.nav`
+const Nav = styled.nav`
   position: fixed;
   top: 0;
   right: 0;
@@ -53,12 +91,13 @@ const Nav  = styled.nav`
 `
 
 const Logo = styled.a`
-padding: 0;
+  padding: 0;
   width: 80px;
   margin-top: 4px;
   max-height: 70px;
   font-size: 0;
   display: inline-block;
+
   img {
     display: block;
     width: 100%;
@@ -88,7 +127,7 @@ const NavMenu = styled.div`
       width: 20px;
       z-index: auto;
     }
-    
+
     span {
       color: rgb(249, 249, 249);
       font-size: 13px;
@@ -97,10 +136,10 @@ const NavMenu = styled.div`
       padding: 2px 0;
       white-space: nowrap;
       position: relative;
-      
-      &:before{
-        background-color: rgb(249,249,249 );
-        border-radius:0 0 4px 4px;
+
+      &:before {
+        background-color: rgb(249, 249, 249);
+        border-radius: 0 0 4px 4px;
         bottom: -6px;
         content: "";
         height: 2px;
@@ -115,13 +154,13 @@ const NavMenu = styled.div`
         width: auto;
       }
     }
-    
-    &:hover{
+
+    &:hover {
       span:before {
         transform: scaleX(1);
         visibility: visible;
         opacity: 1 !important;
-        
+
       }
     }
   }
@@ -131,7 +170,7 @@ const NavMenu = styled.div`
   }
 `
 
-const Login =  styled.a`
+const Login = styled.a`
   background-color: rgba(0, 0, 0, 0.6);
   padding: 8px 16px;
   text-transform: uppercase;
@@ -145,6 +184,10 @@ const Login =  styled.a`
     color: #000;
     border-color: transparent;
   }
+`
+
+const UserImg = styled.img`
+  height: 100%;
 `
 
 export default Header;
