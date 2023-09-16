@@ -6,6 +6,7 @@ import {
     Route
 } from "react-router-dom";
 import Header from "./Components/Header.jsx";
+import Home from "./Components/Home.jsx";
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
                 <Header />
                 <Routes>
                     <Route path="/" element={<Login/>}/>
+                    <Route path="/Home" element={<Home/>}/>
                 </Routes>
             </BrowserRouter>
         </>
