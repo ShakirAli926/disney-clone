@@ -13,15 +13,15 @@ const Home = (props) => {
 
 const Container = styled.div`
   position: relative;
-  min-height: cal(100vh - 250px);
+  min-height: calc(100vh - 250px);
   overflow-x: hidden;
   display: block;
   top: 72px;
   padding: 0 calc(3.2vw + 5px);
   
   &:after  {
-    background: url("/images/home-background.png");
-    content: '';
+    background: url("/images/home-background.png") center center / cover no-repeat fixed;
+    content: "";
     position: absolute;
     inset : 0px;
     opacity: 1;
